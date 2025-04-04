@@ -186,7 +186,10 @@ export default abstract class AbstractDriver {
             connectionOptions.schemaNames,
             connectionOptions.databaseNames
         );
-        dbModel = AbstractDriver.FindPrimaryColumnsFromIndexes(dbModel);
+        dbModel = AbstractDriver.FindPrimaryColumnsFromIndexes(
+            dbModel,
+            generationOptions.skipPKcheck
+        );
         dbModel = await this.GetRelations(
             dbModel,
             connectionOptions.schemaNames,
@@ -395,7 +398,10 @@ export default abstract class AbstractDriver {
         generationOptions: IGenerationOptions
     ): Promise<Entity[]>;
 
-    public static FindPrimaryColumnsFromIndexes(dbModel: Entity[]) {
+    public static FindPrimaryColumnsFromIndexes(
+        dbModel: Entity[],
+        skipPKCheck: boolean
+    ) {
         const dbNewModel: Entity[] = [];
         dbModel.forEach((entity) => {
             const primaryIndex = entity.indices.find((v) => v.primary);
@@ -415,6 +421,7 @@ export default abstract class AbstractDriver {
                     }
                 });
             if (
+                !skipPKCheck &&
                 !entity.columns.some((v) => {
                     return !!v.primary;
                 })

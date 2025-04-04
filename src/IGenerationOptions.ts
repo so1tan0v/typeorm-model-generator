@@ -4,7 +4,6 @@ import path = require("path");
 
 // TODO: change name
 
-// eslint-disable-next-line @typescript-eslint/interface-name-prefix
 export default interface IGenerationOptions {
     resultsPath: string;
     pluralizeNames: boolean;
@@ -25,6 +24,7 @@ export default interface IGenerationOptions {
     skipSchema: boolean;
     indexFile: boolean;
     exportType: "named" | "default";
+    skipPKcheck: boolean;
 }
 
 export const eolConverter = {
@@ -53,6 +53,7 @@ export function getDefaultGenerationOptions(): IGenerationOptions {
         skipSchema: false,
         indexFile: false,
         exportType: "named",
+        skipPKcheck: false,
     };
     return generationOptions;
 }

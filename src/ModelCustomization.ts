@@ -209,8 +209,8 @@ function findFileImports(dbModel: Entity[]) {
                     (v) => v.entityName === relation.relatedTable
                 )
             ) {
-                let relatedTable = dbModel.find(
-                    (related) => related.tscName == relation.relatedTable
+                const relatedTable = dbModel.find(
+                    (related) => related.tscName === relation.relatedTable
                 )!;
                 entity.fileImports.push({
                     entityName: relatedTable.tscName,
