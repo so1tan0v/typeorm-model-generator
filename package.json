@@ -1,8 +1,10 @@
 {
   "name": "typeorm-model-generator",
-  "version": "0.4.6",
+  "version": "1.0.0",
   "description": "Generates models for TypeORM from existing databases.",
-  "bin": "bin/typeorm-model-generator",
+  "bin": {
+    "typeorm-model-generator": "bin/typeorm-model-generator"
+  },
   "main": "./dist/src/library.js",
   "types": "./dist/src/library.d.ts",
   "scripts": {
@@ -15,17 +17,24 @@
     "clean": "rimraf coverage output dist",
     "prettier": "prettier --write ./src/*.ts ./src/**/*.ts"
   },
+  "keywords": [
+    "typeorm",
+    "suffix",
+    "dbfirst",
+    "nestjs"
+  ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Kononnable/typeorm-model-generator.git"
+    "url": "git+https://github.com/so1tan0v/typeorm-model-generator.git"
   },
-  "author": "Kononnable",
+  "author": "cra5hs",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Kononnable/typeorm-model-generator/issues"
+    "url": "https://github.com/so1tan0v/typeorm-model-generator/issues"
   },
-  "homepage": "https://github.com/Kononnable/typeorm-model-generator#readme",
+  "homepage": "https://github.com/so1tan0v/typeorm-model-generatorr#readme",
   "dependencies": {
+    "@types/tedious": "^18.0.0",
     "change-case": "^4.1.2",
     "fs-extra": "^9.1.0",
     "handlebars": "^4.7.7",
@@ -37,6 +46,7 @@
     "prettier": "^2.3.2",
     "reflect-metadata": "^0.1.13",
     "sqlite3": "^5.0.2",
+    "tedious": "^18.6.1",
     "typeorm": "^0.2.37",
     "yargs": "^16.2.0"
   },

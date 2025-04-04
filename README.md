@@ -1,11 +1,23 @@
-# typeorm-model-generator
+# typeorm-model-generator-suffix
 
 [![npm version](https://badge.fury.io/js/typeorm-model-generator.svg)](https://badge.fury.io/js/typeorm-model-generator)
 [![codecov](https://codecov.io/gh/Kononnable/typeorm-model-generator/branch/master/graph/badge.svg)](https://codecov.io/gh/Kononnable/typeorm-model-generator)
 
-***
-## :warning: This project is in a maintenance phase. See [#329](https://github.com/Kononnable/typeorm-model-generator/issues/329) for details.
-***
+![image](https://github.com/user-attachments/assets/c082de79-ee7b-45e4-abf2-fc8f6985e4fa)
+
+
+ - Code first is the shit. 
+ - We are database first
+
+Add more future: --suffix-file, --suffix-class
+
+## NEW WAY
+```shell
+typeorm-model-generator -h 127.0.0.1 -d db -p 1433 -u sa -x pwd -e mssql --case-file none --suffix-file .entity --suffix-class Entity -o ./src
+```
+
+You want to generate: "address.entity.ts" with className is "AddressEntity". Pls run command with opt --suffix-class Entity --suffix-file .entity.
+
 Generates models for TypeORM from existing databases.
 Supported db engines:
 * Microsoft SQL Server
@@ -15,12 +27,23 @@ Supported db engines:
 * Oracle Database
 * SQLite
 
+## DONATE
+```
+Tron(TRX) - USDT
+TU79Fc8UZSPGqPBhm2Mk4ndgmVWRKCnjxB
+```
+
+```
+ETH - ZkSync - Polygon - Multichain - Any token
+0x1F0685725D12084b9e1F0dB4feC12Aa22AB3A8D7
+```
+
 
 ## Installation
 ### Versions
-Typeorm-model-generator comes with preinstalled driver for each supported db(except for oracle). However if you want to use it as a dev-dependency you may want to install your db driver manually to reduce dependency footprint, reduce time spent in the CI. In such case you can use version without preinstalled db drivers - `npm i typeorm-model-generator@no-engines`.  
+Typeorm-model-generator-suffix comes with preinstalled driver for each supported db(except for oracle). However if you want to use it as a dev-dependency you may want to install your db driver manually to reduce dependency footprint, reduce time spent in the CI. In such case you can use version without preinstalled db drivers - `npm i typeorm-model-generator-suffix`.  
 ### Global module
-To install module globally simply type `npm i -g typeorm-model-generator` in your console.
+To install module globally simply type `npm i -g typeorm-model-generator-suffix` in your console.
 ### Npx way
 Thanks to npx you can use npm modules without polluting global installs. So nothing to do here :)
 >To use `npx` you need to use npm at version at least 5.2.0. Try updating your npm by `npm i -g npm`
@@ -56,6 +79,8 @@ Options:
                          and postgres. You can pass multiple values
                          separated by comma eg. -s scheme1,scheme2,scheme3
   --ssl                                               [boolean] [default: false]
+  --suffix-file          .entity
+  --suffix-class         Entity
 ```
 ### Examples
 

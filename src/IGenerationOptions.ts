@@ -10,6 +10,8 @@ export default interface IGenerationOptions {
     pluralizeNames: boolean;
     noConfigs: boolean;
     convertCaseFile: "pascal" | "param" | "camel" | "none";
+    suffixCaseFile: string;
+    suffixClassName: string;
     convertCaseEntity: "pascal" | "camel" | "none";
     convertCaseProperty: "pascal" | "camel" | "snake" | "none";
     convertEol: "LF" | "CRLF";
@@ -35,11 +37,13 @@ export function getDefaultGenerationOptions(): IGenerationOptions {
         resultsPath: path.resolve(process.cwd(), "output"),
         pluralizeNames: true,
         noConfigs: false,
-        convertCaseFile: "pascal",
+        convertCaseFile: "none",
         convertCaseEntity: "pascal",
         convertCaseProperty: "camel",
         convertEol: EOL === "\n" ? "LF" : "CRLF",
         propertyVisibility: "none",
+        suffixCaseFile: "",
+        suffixClassName: "",
         lazy: false,
         activeRecord: false,
         generateConstructor: false,

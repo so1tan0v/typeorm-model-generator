@@ -10,6 +10,7 @@
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
     "stripInternal": true,
+    "skipLibCheck": true,
     "strictNullChecks": true,
     "moduleResolution": "node",
     "newLine": "LF",
@@ -21,7 +22,7 @@
     "typeRoots": [
       "./node_modules/@types"
     ],
-    "resolveJsonModule": true,
+    "resolveJsonModule": true
   },
   "include": [
     "src",

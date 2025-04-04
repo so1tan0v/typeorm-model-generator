@@ -66,14 +66,30 @@ export function relationName(relation: Relation, owner?: Entity): string {
     return newColumnName;
 }
 
-export function entityName(oldEntityName: string, entity?: Entity): string {
-    return oldEntityName;
+export function entityName(
+    oldEntityName: string,
+    suffixName: string,
+    entity?: Entity
+): string {
+    return oldEntityName + suffixName;
 }
 
 export function columnName(oldColumnName: string, column?: Column): string {
     return oldColumnName;
 }
 
-export function fileName(oldFileName: string): string {
-    return oldFileName;
+export function fileName(
+    oldFileName: string,
+    suffixFileName: string,
+    suffixClassName: string
+): string {
+    // Remove the suffixClassName from oldFileName
+    const newFileName = oldFileName.replace(suffixClassName, "");
+
+    // Convert to camelCase: make the first character lowercase
+    const baseName = newFileName.charAt(0).toLowerCase() + newFileName.slice(1);
+
+    // Append the suffixFileName
+    const result = baseName + suffixFileName;
+    return result;
 }
