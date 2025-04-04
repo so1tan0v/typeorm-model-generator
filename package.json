@@ -1,9 +1,9 @@
 {
-  "name": "typeorm-model-generator",
-  "version": "1.0.0",
+  "name": "ts-typeorm-model-generator",
+  "version": "1.0.3",
   "description": "Generates models for TypeORM from existing databases.",
   "bin": {
-    "typeorm-model-generator": "bin/typeorm-model-generator"
+    "typeorm-model-generator": "bin/ts-typeorm-model-generator"
   },
   "main": "./dist/src/library.js",
   "types": "./dist/src/library.d.ts",
@@ -32,7 +32,7 @@
   "bugs": {
     "url": "https://github.com/so1tan0v/typeorm-model-generator/issues"
   },
-  "homepage": "https://github.com/so1tan0v/typeorm-model-generatorr#readme",
+  "homepage": "https://github.com/so1tan0v/typeorm-model-generator#readme",
   "dependencies": {
     "change-case": "^4.1.2",
     "fs-extra": "^9.1.0",
@@ -54,7 +54,7 @@
     "@types/chai": "^4.2.21",
     "@types/chai-as-promised": "^7.1.4",
     "@types/chai-subset": "^1.3.3",
-    "@types/eslint": "^7.28.0",
+    "@types/eslint": "^8.57.1",
     "@types/fs-extra": "^9.0.12",
     "@types/handlebars": "^4.1.0",
     "@types/inquirer": "^7.3.3",
@@ -81,8 +81,8 @@
     "dotenv": "^8.6.0",
     "eslint": "^8.57.1",
     "eslint-config-airbnb-base": "^14.2.1",
-    "eslint-config-prettier": "^6.15.0",
-    "eslint-plugin-import": "^2.24.2",
+    "eslint-config-prettier": "^8.9.0",
+    "eslint-plugin-import": "^2.31.0",
     "husky": "^4.3.8",
     "lint-staged": "^10.5.4",
     "mocha": "^8.4.0",
