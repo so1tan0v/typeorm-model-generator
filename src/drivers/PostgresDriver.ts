@@ -423,6 +423,7 @@ export default class PostgresDriver extends AbstractDriver {
                 break;
             case "USER-DEFINED":
                 ret.tsType = "string";
+                ret.sqlType = "string";
                 switch (udtName) {
                     case "citext":
                     case "hstore":
@@ -695,7 +696,11 @@ export default class PostgresDriver extends AbstractDriver {
         }
         defaultValue = defaultValue.replace(/'::[\w ]*/, "'");
 
-        if (["json", "jsonb"].some((x) => x === dataType)) {
+        if (
+            ["json", "jsonb"].some((x) => x === dataType) &&
+            defaultValue &&
+            defaultValue[0] !== "j"
+        ) {
             return `${defaultValue.slice(1, defaultValue.length - 1)}`;
         }
         return `() => "${defaultValue}"`;
