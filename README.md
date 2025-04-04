@@ -1,23 +1,12 @@
-# typeorm-model-generator-suffix
+# ts-typeorm-model-generator
 
-[![npm version](https://badge.fury.io/js/typeorm-model-generator.svg)](https://badge.fury.io/js/typeorm-model-generator)
-[![codecov](https://codecov.io/gh/Kononnable/typeorm-model-generator/branch/master/graph/badge.svg)](https://codecov.io/gh/Kononnable/typeorm-model-generator)
+### THANKS
+1. https://github.com/anapaula-noleto
+2. https://github.com/0xcra5hs
+3. https://github.com/Kononnable
 
-![image](https://github.com/user-attachments/assets/c082de79-ee7b-45e4-abf2-fc8f6985e4fa)
 
-
- - Code first is the shit. 
- - We are database first
-
-Add more future: --suffix-file, --suffix-class
-
-## NEW WAY
-```shell
-typeorm-model-generator -h 127.0.0.1 -d db -p 1433 -u sa -x pwd -e mssql --case-file none --suffix-file .entity --suffix-class Entity -o ./src
-```
-
-You want to generate: "address.entity.ts" with className is "AddressEntity". Pls run command with opt --suffix-class Entity --suffix-file .entity.
-
+## Usage 
 Generates models for TypeORM from existing databases.
 Supported db engines:
 * Microsoft SQL Server
@@ -26,18 +15,6 @@ Supported db engines:
 * MariaDB
 * Oracle Database
 * SQLite
-
-## DONATE
-```
-Tron(TRX) - USDT
-TU79Fc8UZSPGqPBhm2Mk4ndgmVWRKCnjxB
-```
-
-```
-ETH - ZkSync - Polygon - Multichain - Any token
-0x1F0685725D12084b9e1F0dB4feC12Aa22AB3A8D7
-```
-
 
 ## Installation
 ### Versions
