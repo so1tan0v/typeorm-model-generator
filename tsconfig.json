@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "target": "es2017",
+    "target": "ES2022",
     "noImplicitAny": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
@@ -16,8 +16,8 @@
     "newLine": "LF",
     "outDir": "dist",
     "lib": [
-      "es2019",
-      "es2019.array"
+      "ES2022",
+      "ES2022.array"
     ],
     "typeRoots": [
       "./node_modules/@types"

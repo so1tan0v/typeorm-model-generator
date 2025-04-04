@@ -23,36 +23,36 @@ describe("Model customization phase", async () => {
                     options: { name: "id" },
                     tscName: "id",
                     tscType: "number",
-                    primary: true
+                    primary: true,
                 },
                 {
                     type: "character varying",
                     options: { name: "name" },
                     tscName: "name",
-                    tscType: "string"
+                    tscType: "string",
                 },
                 {
                     type: "character varying",
                     options: { name: "complicatedName" },
                     tscName: "complexName",
-                    tscType: "string"
-                }
+                    tscType: "string",
+                },
             ],
             indices: [
                 {
                     columns: ["id"],
                     options: { unique: true },
                     name: "PK_6571d08cfb2f1ab06c3aab425a6",
-                    primary: true
-                }
+                    primary: true,
+                },
             ],
             relations: [
                 {
                     fieldName: "Post",
                     relatedField: "authorId",
                     relatedTable: "Post",
-                    relationType: "OneToMany"
-                }
+                    relationType: "OneToMany",
+                },
             ],
             relationIds: [],
             sqlName: "PostAuthor",
@@ -60,7 +60,7 @@ describe("Model customization phase", async () => {
             fileName: "PostAuthor",
             database: "",
             schema: "public",
-            fileImports: []
+            fileImports: [],
         },
         {
             columns: [
@@ -70,44 +70,44 @@ describe("Model customization phase", async () => {
                     options: { name: "id" },
                     tscName: "id",
                     tscType: "number",
-                    primary: true
+                    primary: true,
                 },
                 {
                     type: "character varying",
                     options: { name: "title" },
                     tscName: "title",
-                    tscType: "string"
+                    tscType: "string",
                 },
                 {
                     type: "character varying",
                     options: { name: "text" },
                     tscName: "text",
-                    tscType: "string"
-                }
+                    tscType: "string",
+                },
             ],
             indices: [
                 {
                     columns: ["authorId"],
                     options: { unique: true },
-                    name: "REL_cef8d6e8edb69c82e5f10bb402"
+                    name: "REL_cef8d6e8edb69c82e5f10bb402",
                 },
                 {
                     columns: ["id"],
                     options: { unique: true },
                     name: "PK_c4d3b3dcd73db0b0129ea829f9f",
-                    primary: true
-                }
+                    primary: true,
+                },
             ],
             relations: [
                 {
                     fieldName: "authorId",
                     relatedField: "Post",
                     joinColumnOptions: [
-                        { name: "authorId", referencedColumnName: "id" }
+                        { name: "authorId", referencedColumnName: "id" },
                     ],
                     relatedTable: "PostAuthor",
-                    relationType: "ManyToOne"
-                }
+                    relationType: "ManyToOne",
+                },
             ],
             relationIds: [],
             sqlName: "Post",
@@ -115,8 +115,8 @@ describe("Model customization phase", async () => {
             fileName: "Post",
             database: "",
             schema: "public",
-            fileImports: []
-        }
+            fileImports: [],
+        },
     ];
 
     const resultsPath = path.resolve(process.cwd(), `output`);
@@ -319,7 +319,7 @@ describe("Model customization phase", async () => {
             expect(postAuthorContent).to.contain("posts: Post[];");
             expect(postAuthorContent).to.contain("complex_name: string;");
 
-            compileGeneratedModel(generationOptions.resultsPath, [""],false);
+            compileGeneratedModel(generationOptions.resultsPath, [""], false);
         });
     });
     describe("EOL", async () => {
@@ -660,6 +660,8 @@ describe("Model customization phase", async () => {
         generationOptions.convertCaseEntity = "none";
         generationOptions.convertCaseFile = "none";
         generationOptions.convertCaseProperty = "none";
+        generationOptions.suffixCaseFile = "";
+        generationOptions.suffixClassName = "";
         generationOptions.customNamingStrategyPath =
             "test/modelCustomization/testNamingStrategy.ts";
         // TODO: relationId
@@ -676,23 +678,23 @@ describe("Model customization phase", async () => {
         );
         const filesGenPath = path.resolve(resultsPath, "entities");
         const postContent = fs
-            .readFileSync(path.resolve(filesGenPath, "Post_B_D.ts"))
+            .readFileSync(path.resolve(filesGenPath, "post_B.entity_D.ts"))
             .toString();
         const postAuthorContent = fs
-            .readFileSync(path.resolve(filesGenPath, "PostAuthor_B_D.ts"))
+            .readFileSync(path.resolve(filesGenPath, "postAuthor_B.entity_D.ts"))
             .toString();
         expect(postContent).to.have.string(`@Entity("Post"`);
-        expect(postContent).to.have.string(`class Post_B {`);
+        expect(postContent).to.have.string(`class PostEntity_B {`);
         expect(postContent).to.have.string(`id_C: number;`);
-        expect(postContent).to.have.string(`author_A: PostAuthor_B`);
+        expect(postContent).to.have.string(`author_A: PostAuthorEntity_B`);
         expect(postContent).to.have.string(
-            `import { PostAuthor_B } from "./PostAuthor_B_D";`
+            `import { PostAuthorEntity_B } from "./postAuthor_B.entity_D";`
         );
         expect(postAuthorContent).to.have.string(`@Entity("PostAuthor"`);
-        expect(postAuthorContent).to.have.string(`class PostAuthor_B`);
+        expect(postAuthorContent).to.have.string(`class PostAuthorEntity_B`);
         expect(postAuthorContent).to.have.string(`id_C: number;`);
         expect(postAuthorContent).to.have.string(
-            `import { Post_B } from "./Post_B_D";`
+            `import { PostEntity_B } from "./post_B.entity_D";`
         );
 
         compileGeneratedModel(generationOptions.resultsPath, [""], false);

@@ -5,8 +5,8 @@ import * as fs from "fs-extra";
 import * as path from "path";
 import * as chaiSubset from "chai-subset";
 import * as flatMap from "array.prototype.flatmap";
-import { CLIEngine } from "eslint";
-import * as dotEnv from "dotenv"
+import { CLIEngine, ESLint } from "eslint";
+import * as dotEnv from "dotenv";
 import EntityFileToJson from "../utils/EntityFileToJson";
 import { createDriver, dataCollectionPhase } from "../../src/Engine";
 import * as GTU from "../utils/GeneralTestUtils";
@@ -40,60 +40,61 @@ describe("TypeOrm examples", async () => {
 });
 describe("Filtering tables", async () => {
     const testPartialPath = "test/integration/examples";
-    it("skipTables",async ()=>{
+    it("skipTables", async () => {
         const dbDrivers = GTU.getEnabledDbDrivers();
-        const modelGenerationPromises = dbDrivers.map(async dbDriver => {
-            const {
-                generationOptions,
-                driver,
-                connectionOptions
-            } = await prepareTestRuns(testPartialPath, "sample2-one-to-one", dbDriver);
+        const modelGenerationPromises = dbDrivers.map(async (dbDriver) => {
+            const { generationOptions, driver, connectionOptions } =
+                await prepareTestRuns(
+                    testPartialPath,
+                    "sample2-one-to-one",
+                    dbDriver
+                );
             const dbModel = await dataCollectionPhase(
-                        driver,
-                        {...connectionOptions,
-                        skipTables:["Post"]},
-                        generationOptions
-                    );
+                driver,
+                { ...connectionOptions, skipTables: ["Post"] },
+                generationOptions
+            );
             expect(dbModel.length).to.equal(6);
             // eslint-disable-next-line no-unused-expressions
-            expect(dbModel.find(x=>x.sqlName==="Post")).to.be.undefined;
+            expect(dbModel.find((x) => x.sqlName === "Post")).to.be.undefined;
         });
         await Promise.all(modelGenerationPromises);
     });
-    it("onlyTables",async ()=>{
+    it("onlyTables", async () => {
         const dbDrivers = GTU.getEnabledDbDrivers();
-        const modelGenerationPromises = dbDrivers.map(async dbDriver => {
-            const {
-                generationOptions,
-                driver,
-                connectionOptions
-            } = await prepareTestRuns(testPartialPath, "sample2-one-to-one", dbDriver);
+        const modelGenerationPromises = dbDrivers.map(async (dbDriver) => {
+            const { generationOptions, driver, connectionOptions } =
+                await prepareTestRuns(
+                    testPartialPath,
+                    "sample2-one-to-one",
+                    dbDriver
+                );
             const dbModel = await dataCollectionPhase(
-                        driver,
-                        {...connectionOptions,
-                        onlyTables:["Post"]},
-                        generationOptions
-                    );
+                driver,
+                { ...connectionOptions, onlyTables: ["Post"] },
+                generationOptions
+            );
             expect(dbModel.length).to.equal(1);
             // eslint-disable-next-line no-unused-expressions
-            expect(dbModel.find(x=>x.sqlName==="Post")).to.not.be.undefined;
+            expect(dbModel.find((x) => x.sqlName === "Post")).to.not.be
+                .undefined;
         });
         await Promise.all(modelGenerationPromises);
-    })
-
+    });
 });
 
 async function runTestsFromPath(
     testPartialPath: string,
     isDbSpecific: boolean
 ) {
-    const dbDrivers: IConnectionOptions["databaseType"][] = GTU.getEnabledDbDrivers();
+    const dbDrivers: IConnectionOptions["databaseType"][] =
+        GTU.getEnabledDbDrivers();
     createOutputDirs(dbDrivers);
     const files = fs.readdirSync(path.resolve(process.cwd(), testPartialPath));
     if (isDbSpecific) {
         await runTest(dbDrivers, testPartialPath, files);
     } else {
-        files.forEach(folder => {
+        files.forEach((folder) => {
             runTestForMultipleDrivers(folder, dbDrivers, testPartialPath);
         });
     }
@@ -104,7 +105,7 @@ function createOutputDirs(dbDrivers: string[]) {
     if (!fs.existsSync(resultsPath)) {
         fs.mkdirSync(resultsPath);
     }
-    dbDrivers.forEach(dbDriver => {
+    dbDrivers.forEach((dbDriver) => {
         const newDirPath = path.resolve(resultsPath, dbDriver);
         if (!fs.existsSync(newDirPath)) {
             fs.mkdirSync(newDirPath);
@@ -119,21 +120,21 @@ function runTestForMultipleDrivers(
 ) {
     it(testName, async () => {
         const driversToRun = selectDriversForSpecificTest();
-        const modelGenerationPromises = driversToRun.map(async dbDriver => {
+        const modelGenerationPromises = driversToRun.map(async (dbDriver) => {
             const {
                 generationOptions,
                 driver,
                 connectionOptions,
                 resultsPath,
-                filesOrgPathTS
+                filesOrgPathTS,
             } = await prepareTestRuns(testPartialPath, testName, dbDriver);
-        let dbModel: Entity[] = [];
+            let dbModel: Entity[] = [];
             switch (testName) {
                 case "144":
                     dbModel = await dataCollectionPhase(
                         driver,
                         Object.assign(connectionOptions, {
-                            databaseNames: ["db1","db2"]
+                            databaseNames: ["db1", "db2"],
                         }),
                         generationOptions
                     );
@@ -143,7 +144,7 @@ function runTestForMultipleDrivers(
                     dbModel = await dataCollectionPhase(
                         driver,
                         Object.assign(connectionOptions, {
-                            databaseNames: ["db-1","db-2"]
+                            databaseNames: ["db-1", "db-2"],
                         }),
                         generationOptions
                     );
@@ -157,13 +158,13 @@ function runTestForMultipleDrivers(
                     );
                     break;
             }
-                    dbModel = modelCustomizationPhase(
+            dbModel = modelCustomizationPhase(
                 dbModel,
                 generationOptions,
                 driver.defaultValues
             );
             modelGenerationPhase(connectionOptions, generationOptions, dbModel);
-                    const filesGenPath = path.resolve(resultsPath, "entities");
+            const filesGenPath = path.resolve(resultsPath, "entities");
             compareGeneratedFiles(filesOrgPathTS, filesGenPath);
             return {
                 dbModel,
@@ -171,7 +172,7 @@ function runTestForMultipleDrivers(
                 connectionOptions,
                 resultsPath,
                 filesOrgPathTS,
-                dbDriver
+                dbDriver,
             };
         });
         await Promise.all(modelGenerationPromises);
@@ -182,30 +183,27 @@ function runTestForMultipleDrivers(
         switch (testName) {
             case "39":
                 return dbDrivers.filter(
-                    dbDriver =>
+                    (dbDriver) =>
                         !["mysql", "mariadb", "oracle", "sqlite"].includes(
                             dbDriver
                         )
                 );
             case "93":
                 return dbDrivers.filter(
-                    dbDriver =>
-                        ["mysql", "mariadb"].includes(dbDriver) // Only db engines supported by typeorm at the time of writing
+                    (dbDriver) => ["mysql", "mariadb"].includes(dbDriver) // Only db engines supported by typeorm at the time of writing
                 );
             case "144":
-                return dbDrivers.filter(dbDriver =>
+                return dbDrivers.filter((dbDriver) =>
                     ["mysql", "mariadb"].includes(dbDriver)
                 );
             case "248":
-                return dbDrivers.filter(dbDriver =>
-                    dbDriver === "postgres"
-                );
+                return dbDrivers.filter((dbDriver) => dbDriver === "postgres");
             case "273":
-                return dbDrivers.filter(dbDriver =>
-                    ["mysql", "mariadb","mssql"].includes(dbDriver)
+                return dbDrivers.filter((dbDriver) =>
+                    ["mysql", "mariadb", "mssql"].includes(dbDriver)
                 );
             case "285":
-                return dbDrivers.filter(dbDriver =>
+                return dbDrivers.filter((dbDriver) =>
                     ["mysql", "mariadb"].includes(dbDriver)
                 );
             default:
@@ -220,14 +218,14 @@ async function runTest(
     files: string[]
 ) {
     const modelGenerationPromises = dbDrivers
-        .filter(driver => files.includes(driver))
-        .map(async dbDriver => {
+        .filter((driver) => files.includes(driver))
+        .map(async (dbDriver) => {
             const {
                 generationOptions,
                 driver,
                 connectionOptions,
                 resultsPath,
-                filesOrgPathTS
+                filesOrgPathTS,
             } = await prepareTestRuns(testPartialPath, dbDriver, dbDriver);
             let dbModel = await dataCollectionPhase(
                 driver,
@@ -248,7 +246,7 @@ async function runTest(
                 connectionOptions,
                 resultsPath,
                 filesOrgPathTS,
-                dbDriver
+                dbDriver,
             };
         });
     await Promise.all(modelGenerationPromises);
@@ -258,35 +256,35 @@ async function runTest(
 function compareGeneratedFiles(filesOrgPathTS: string, filesGenPath: string) {
     const filesOrg = fs
         .readdirSync(filesOrgPathTS)
-        .filter(val => val.toString().endsWith(".ts"));
+        .filter((val) => val.toString().endsWith(".ts"));
     const filesGen = fs
         .readdirSync(filesGenPath)
-        .filter(val => val.toString().endsWith(".ts"));
+        .filter((val) => val.toString().endsWith(".ts"));
     expect(filesOrg, "Errors detected in model comparison").to.be.deep.equal(
         filesGen
     );
-    const generatedEntities = filesOrg.map(file =>
+    const generatedEntities = filesOrg.map((file) =>
         EntityFileToJson.convert(
             fs.readFileSync(path.resolve(filesGenPath, file))
         )
     );
-    const originalEntities = filesGen.map(file =>
+    const originalEntities = filesGen.map((file) =>
         EntityFileToJson.convert(
             fs.readFileSync(path.resolve(filesOrgPathTS, file))
         )
     );
     generatedEntities
-        .flatMap(entity =>
+        .flatMap((entity) =>
             entity.columns
                 .filter(
-                    column =>
+                    (column) =>
                         column.relationType === "ManyToMany" &&
                         column.joinOptions.length > 0
                 )
-                .map(v => {
+                .map((v) => {
                     return {
                         ownerColumn: v,
-                        ownerEntity: entity
+                        ownerEntity: entity,
                     };
                 })
         )
@@ -294,22 +292,22 @@ function compareGeneratedFiles(filesOrgPathTS: string, filesGenPath: string) {
         .forEach(({ ownerColumn, ownerEntity }) => {
             const childColumn = generatedEntities
                 .find(
-                    childEntity =>
+                    (childEntity) =>
                         childEntity.entityName.toLowerCase() ===
                         ownerColumn.columnTypes[0]
                             .substring(0, ownerColumn.columnTypes[0].length - 2)
                             .toLowerCase()
                 )!
                 .columns.find(
-                    column =>
+                    (column) =>
                         column.columnTypes[0].toLowerCase() ===
                         `${ownerEntity.entityName}[]`.toLowerCase()
                 )!;
-            childColumn.joinOptions = ownerColumn.joinOptions.map(options => {
+            childColumn.joinOptions = ownerColumn.joinOptions.map((options) => {
                 return {
                     ...options,
                     joinColumns: options.inverseJoinColumns,
-                    inverseJoinColumns: options.joinColumns
+                    inverseJoinColumns: options.joinColumns,
                 };
             });
         });
@@ -325,24 +323,26 @@ function compareGeneratedFiles(filesOrgPathTS: string, filesGenPath: string) {
 
 // TODO: Move(?)
 // eslint-disable-next-line import/prefer-default-export
-export function compileGeneratedModel(
+export async function compileGeneratedModel(
     filesGenPath: string,
     drivers: string[],
     lintGeneratedFiles = true
 ) {
     const currentDirectoryFiles: string[] = [];
-    drivers.forEach(driver => {
+    drivers.forEach((driver) => {
         const entitiesPath = path.resolve(filesGenPath, driver, "entities");
         if (fs.existsSync(entitiesPath)) {
             currentDirectoryFiles.push(
                 ...fs
                     .readdirSync(entitiesPath)
                     .filter(
-                        fileName =>
+                        (fileName) =>
                             fileName.length >= 3 &&
                             fileName.substr(fileName.length - 3, 3) === ".ts"
                     )
-                    .map(v => path.resolve(filesGenPath, driver, "entities", v))
+                    .map((v) =>
+                        path.resolve(filesGenPath, driver, "entities", v)
+                    )
             );
         }
     });
@@ -350,9 +350,9 @@ export function compileGeneratedModel(
         experimentalDecorators: true,
         sourceMap: false,
         emitDecoratorMetadata: true,
-        target: ts.ScriptTarget.ES2016,
+        target: ts.ScriptTarget.ES2022,
         moduleResolution: ts.ModuleResolutionKind.NodeJs,
-        module: ts.ModuleKind.CommonJS
+        module: ts.ModuleKind.CommonJS,
     });
     expect(
         compiledWithoutErrors,
@@ -360,17 +360,16 @@ export function compileGeneratedModel(
     ).to.equal(true);
 
     if (lintGeneratedFiles) {
-        const cli = new CLIEngine({ configFile: "test/configs/.eslintrc.js" });
-        const lintReport = cli.executeOnFiles(currentDirectoryFiles);
-        lintReport.results.forEach(result =>
-            result.messages.forEach(message => {
+        const cli = new ESLint();
+        const lintReport = await cli.lintFiles(currentDirectoryFiles);
+        lintReport.forEach((result) =>
+            result.messages.forEach((message) => {
                 console.error(
                     `${result.filePath}:${message.line} - ${message.message}`
                 );
             })
         );
-        expect(lintReport.errorCount).to.equal(0);
-        expect(lintReport.warningCount).to.equal(0);
+        expect(lintReport).to.equal(0);
     }
 }
 
@@ -403,8 +402,7 @@ async function prepareTestRuns(
         case "sample18-lazy-relations":
             generationOptions.lazy = true;
             break;
-        case "144":
-        {
+        case "144": {
             let connectionOptions: IConnectionOptions;
             switch (dbDriver) {
                 case "mariadb":
@@ -415,14 +413,14 @@ async function prepareTestRuns(
                     break;
             }
             await driver.ConnectToServer(connectionOptions!);
-            await createDatabases(["db1","db2"], driver);
+            await createDatabases(["db1", "db2"], driver);
             await driver.DisconnectFromServer();
             break;
         }
-            case "273":{
-                const connectionOptions= GTU.getTomgConnectionOptions(dbDriver);
-                await driver.ConnectToServer(connectionOptions!);
-                await createDatabases(["db-1","db-2"], driver);
+        case "273": {
+            const connectionOptions = GTU.getTomgConnectionOptions(dbDriver);
+            await driver.ConnectToServer(connectionOptions!);
+            await createDatabases(["db-1", "db-2"], driver);
             await driver.DisconnectFromServer();
             break;
         }
@@ -438,7 +436,7 @@ async function prepareTestRuns(
         driver,
         connectionOptions,
         resultsPath,
-        filesOrgPathTS
+        filesOrgPathTS,
     };
 }
 async function createDatabases(databases: string[], driver: AbstractDriver) {
@@ -448,4 +446,3 @@ async function createDatabases(databases: string[], driver: AbstractDriver) {
         }
     }
 }
-

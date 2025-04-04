@@ -1,9 +1,9 @@
 import { ConnectionOptions, createConnection } from "typeorm";
 import * as ts from "typescript";
 import * as yn from "yn";
-import * as path from "path"
+import * as path from "path";
 import IGenerationOptions, {
-    getDefaultGenerationOptions
+    getDefaultGenerationOptions,
 } from "../../src/IGenerationOptions";
 import IConnectionOptions from "../../src/IConnectionOptions";
 import MssqlDriver from "../../src/drivers/MssqlDriver";
@@ -43,14 +43,14 @@ export async function createMSSQLModels(
         dropSchema: true,
         synchronize: false,
         entities: [path.resolve(filesOrgPath, "*.ts")],
-        name: "mssql"
+        name: "mssql",
     };
 
     const schemas = "dbo,sch1,sch2";
     const conn = await createConnection(connOpt);
     const queryRunner = conn.createQueryRunner();
     await Promise.all(
-        schemas.split(",").map(sch => queryRunner.createSchema(sch, true))
+        schemas.split(",").map((sch) => queryRunner.createSchema(sch, true))
     );
     await conn.synchronize();
 
@@ -85,14 +85,14 @@ export async function createPostgresModels(
         dropSchema: true,
         synchronize: false,
         entities: [path.resolve(filesOrgPath, "*.ts")],
-        name: "postgres"
+        name: "postgres",
     };
 
     const schemas = "public,sch1,sch2";
     const conn = await createConnection(connOpt);
     const queryRunner = conn.createQueryRunner();
     await Promise.all(
-        schemas.split(",").map(sch => queryRunner.createSchema(sch, true))
+        schemas.split(",").map((sch) => queryRunner.createSchema(sch, true))
     );
     await conn.synchronize();
 
@@ -114,7 +114,7 @@ export async function createSQLiteModels(
         dropSchema: true,
         synchronize: false,
         entities: [path.resolve(filesOrgPath, "*.ts")],
-        name: "sqlite"
+        name: "sqlite",
     };
 
     const conn = await createConnection(connOpt);
@@ -150,7 +150,7 @@ export async function createMysqlModels(
         dropSchema: true,
         synchronize: true,
         entities: [path.resolve(filesOrgPath, "*.ts")],
-        name: "mysql"
+        name: "mysql",
     };
     const conn = await createConnection(connOpt);
 
@@ -183,7 +183,7 @@ export async function createMariaDBModels(
         dropSchema: true,
         synchronize: true,
         entities: [path.resolve(filesOrgPath, "*.ts")],
-        name: "mariadb"
+        name: "mariadb",
     };
     const conn = await createConnection(connOpt);
 
@@ -221,7 +221,7 @@ export async function createOracleDBModels(
         port: Number(process.env.ORACLE_Port),
         synchronize: true,
         entities: [path.resolve(filesOrgPath, "*.ts")],
-        name: "oracle"
+        name: "oracle",
     };
     const conn = await createConnection(connOpt);
 
@@ -243,7 +243,11 @@ export function compileTsFiles(
 
     const allDiagnostics = [...preDiagnostics, ...emitResult.diagnostics];
 
-    allDiagnostics.forEach(diagnostic => {
+    allDiagnostics.forEach((diagnostic) => {
+        if (!diagnostic.file) {
+            return;
+        }
+
         const lineAndCharacter = diagnostic.file!.getLineAndCharacterOfPosition(
             diagnostic.start!
         );
@@ -252,8 +256,9 @@ export function compileTsFiles(
             "\n"
         );
         console.log(
-            `${diagnostic.file!.fileName} (${lineAndCharacter.line +
-            1},${lineAndCharacter.character + 1}): ${message}`
+            `${diagnostic.file!.fileName} (${lineAndCharacter.line + 1},${
+                lineAndCharacter.character + 1
+            }): ${message}`
         );
         compiledWithoutErrors = false;
     });
@@ -307,8 +312,9 @@ export function createModelsInDb(
     }
 }
 
-
-export function getTomgConnectionOptions(dbType: IConnectionOptions["databaseType"]): IConnectionOptions {
+export function getTomgConnectionOptions(
+    dbType: IConnectionOptions["databaseType"]
+): IConnectionOptions {
     switch (dbType) {
         case "mssql":
             return {
@@ -318,10 +324,10 @@ export function getTomgConnectionOptions(dbType: IConnectionOptions["databaseTyp
                 user: String(process.env.MSSQL_Username),
                 password: String(process.env.MSSQL_Password),
                 databaseType: "mssql",
-                schemaNames: ["dbo","sch1","sch2"],
+                schemaNames: ["dbo", "sch1", "sch2"],
                 ssl: yn(process.env.MSSQL_SSL, { default: false }),
                 skipTables: [],
-                onlyTables: []
+                onlyTables: [],
             };
         case "mariadb":
             return {
@@ -334,7 +340,7 @@ export function getTomgConnectionOptions(dbType: IConnectionOptions["databaseTyp
                 schemaNames: ["ignored"],
                 ssl: yn(process.env.MARIADB_SSL, { default: false }),
                 skipTables: [],
-                onlyTables: []
+                onlyTables: [],
             };
         case "mysql":
             return {
@@ -347,7 +353,7 @@ export function getTomgConnectionOptions(dbType: IConnectionOptions["databaseTyp
                 schemaNames: ["ignored"],
                 ssl: yn(process.env.MYSQL_SSL, { default: false }),
                 skipTables: [],
-                onlyTables: []
+                onlyTables: [],
             };
         case "oracle":
             return {
@@ -360,7 +366,7 @@ export function getTomgConnectionOptions(dbType: IConnectionOptions["databaseTyp
                 schemaNames: [String(process.env.ORACLE_Username)],
                 ssl: yn(process.env.ORACLE_SSL, { default: false }),
                 skipTables: [],
-                onlyTables: []
+                onlyTables: [],
             };
         case "postgres":
             return {
@@ -370,25 +376,25 @@ export function getTomgConnectionOptions(dbType: IConnectionOptions["databaseTyp
                 user: String(process.env.POSTGRES_Username),
                 password: String(process.env.POSTGRES_Password),
                 databaseType: "postgres",
-                schemaNames: ["public","sch1","sch2"],
+                schemaNames: ["public", "sch1", "sch2"],
                 ssl: yn(process.env.POSTGRES_SSL, { default: false }),
                 skipTables: ["spatial_ref_sys"],
-                onlyTables: []
+                onlyTables: [],
             };
-        case "sqlite": return {
-            host: "",
-            port: 0,
-            databaseNames: [String(process.env.SQLITE_Database)],
-            user: "",
-            password: "",
-            databaseType: "sqlite",
-            schemaNames: [""],
-            ssl: false,
-            skipTables: [],
-            onlyTables: []
-        };
+        case "sqlite":
+            return {
+                host: "",
+                port: 0,
+                databaseNames: [String(process.env.SQLITE_Database)],
+                user: "",
+                password: "",
+                databaseType: "sqlite",
+                schemaNames: [""],
+                ssl: false,
+                skipTables: [],
+                onlyTables: [],
+            };
         default:
             return assertUnreachable(dbType);
     }
-
 }
