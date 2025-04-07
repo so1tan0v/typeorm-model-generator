@@ -1,6 +1,6 @@
 {
   "name": "ts-typeorm-model-generator",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Generates models for TypeORM from existing databases.",
   "bin": {
     "typeorm-model-generator": "bin/ts-typeorm-model-generator"
@@ -14,7 +14,7 @@
     "pretest": "tsc --noEmit",
     "test": "nyc --reporter=lcov ts-node ./node_modules/mocha/bin/_mocha test/**/*.test.ts --config test/configs/mocha.json -- --bail",
     "posttest": "eslint ./src/**/*.ts  ./test/**/*.ts",
-    "clean": "rimraf coverage output dist",
+    "clean": "rimraf coverage output dist tmp",
     "prettier": "prettier --write ./src/*.ts ./src/**/*.ts"
   },
   "keywords": [

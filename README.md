@@ -1,10 +1,12 @@
 # ts-typeorm-model-generator
 
-### THANKS
-1. https://github.com/anapaula-noleto
-2. https://github.com/0xcra5hs
-3. https://github.com/Kononnable
+## Gratitude
+1. https://github.com/Kononnable
+2. https://github.com/anapaula-noleto
+3. https://github.com/0xcra5hs
 
+## For Developers
+This library works with Node.js >= 18
 
 ## Usage 
 Generates models for TypeORM from existing databases.
@@ -28,6 +30,13 @@ Thanks to npx you can use npm modules without polluting global installs. So noth
 All database drivers except oracle are installed by default. To use typeorm-model-generator with oracle database you need to install driver with `npm i oracledb` and configure [oracle install client](http://www.oracle.com/technetwork/database/database-technologies/instant-client/overview/index.html) on your machine.
 
 ## Usage 
+
+### In code
+
+Will soon
+
+### CLI
+
 There are two way to use this utility:
 - Use step by step wizard which will guide you though the process - just type `npx typeorm-model-generator` in your console.
 - Provide all parameters through command line(examples below)
@@ -58,6 +67,7 @@ Options:
   --ssl                                               [boolean] [default: false]
   --suffix-file          .entity
   --suffix-class         Entity
+  --skip-pk-check        Skip primary key check
 ```
 ### Examples
 

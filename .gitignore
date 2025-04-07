@@ -1,13 +1,21 @@
+# Tmp
 node_modules/
+tmp
 npm-debug.log
 ormconfig.json
 .vscode
 .idea
 typings/
+
+## test
 output/**/*.*
 .nyc_output/
 coverage/
+
+# Env & configs
 .env
+.tomg-config
+
+# Build
 dist
 *.tgz
-.tomg-config

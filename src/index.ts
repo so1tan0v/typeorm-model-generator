@@ -313,7 +313,7 @@ function checkYargsParameters(options: options): options {
             alias: "skip-pk-check",
             boolean: true,
             default: options.generationOptions.skipPKcheck,
-            describe: "Skip Primary key check",
+            describe: "Skip primary key check",
         },
     });
 
