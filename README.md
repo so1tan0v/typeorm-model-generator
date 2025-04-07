@@ -1,3 +1,5 @@
+[![npm version](https://badge.fury.io/js/ts-typeorm-model-generator.svg)](https://badge.fury.io/js/ts-typeorm-model-generator)
+
 # ts-typeorm-model-generator
 
 ## Gratitude
