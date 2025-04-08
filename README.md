@@ -35,7 +35,56 @@ All database drivers except oracle are installed by default. To use typeorm-mode
 
 ### In code
 
-Will soon
+```typescript
+export async function generateEntity(
+  databaseConfig: DatabaseConfig,
+  schemas: string[],
+  resultPath: string
+): Promise<string> {
+  fs.mkdirSync(resultPath, { recursive: true });
+
+  let options = generateConfig(databaseConfig, schemas, resultPath);
+
+  const driver = createDriver(options.connectionOptions.databaseType);
+  await createModelFromDatabase(driver, options.connectionOptions, options.generationOptions);
+
+  return resultPath;
+}
+
+function generateConfig(
+  databaseConfig: DatabaseConfig,
+  schemas: string[],
+  resultPath: string
+): {
+  generationOptions: IGenerationOptions;
+  connectionOptions: IConnectionOptions;
+} {
+  const generationOptions = getDefaultGenerationOptions();
+  const connectionOptions = getDefaultConnectionOptions();
+
+  connectionOptions.host = databaseConfig.host;
+  connectionOptions.port = databaseConfig.port;
+  connectionOptions.databaseType = databaseConfig.dialect;
+  connectionOptions.user = databaseConfig.user;
+  connectionOptions.password = databaseConfig.password;
+  connectionOptions.databaseNames = [databaseConfig.db_name];
+  connectionOptions.schemaNames = schemas;
+
+  generationOptions.skipPKcheck = true;
+  generationOptions.suffixClassName = 'Entity';
+  generationOptions.suffixCaseFile = '.entity';
+  generationOptions.convertCaseEntity = 'pascal';
+  generationOptions.resultsPath = path.join(resultPath, 'entities');
+  generationOptions.noConfigs = true;
+  generationOptions.separateEntityAccordingSchemes = true;
+
+  return {
+    generationOptions,
+    connectionOptions
+  };
+}
+
+```
 
 ### CLI
 
