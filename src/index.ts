@@ -315,6 +315,12 @@ function checkYargsParameters(options: options): options {
             default: options.generationOptions.skipPKcheck,
             describe: "Skip primary key check",
         },
+        separateEntityAccordingSchemes: {
+            alias: "separate-entity-according-schemes",
+            boolean: true,
+            default: options.generationOptions.separateEntityAccordingSchemes,
+            describe: "Skip primary key check",
+        },
     });
 
     options.connectionOptions.databaseNames = argv.d.split(",");
@@ -372,6 +378,8 @@ function checkYargsParameters(options: options): options {
         ? "default"
         : "named";
     options.generationOptions.skipPKcheck = argv.k;
+    options.generationOptions.separateEntityAccordingSchemes =
+        argv.separateEntityAccordingSchemes;
 
     return options;
 }

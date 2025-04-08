@@ -80,10 +80,20 @@ function generateModels(
                 throw new Error("Unknown case style");
         }
         casedFileName += generationOptions.suffixCaseFile;
-        const resultFilePath = path.resolve(
-            entitiesPath,
-            `${casedFileName}.ts`
-        );
+        let resultFilePath: string;
+        if (
+            element.schema &&
+            generationOptions.separateEntityAccordingSchemes
+        ) {
+            resultFilePath = path.resolve(
+                entitiesPath,
+                element.schema,
+                `${casedFileName}.ts`
+            );
+            fs.mkdirSync(path.dirname(resultFilePath), { recursive: true });
+        } else {
+            resultFilePath = path.resolve(entitiesPath, `${casedFileName}.ts`);
+        }
         const rendered = entityCompliedTemplate(element);
         const withImportStatements = removeUnusedImports(
             EOL !== eolConverter[generationOptions.convertEol]

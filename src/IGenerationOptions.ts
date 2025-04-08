@@ -25,6 +25,7 @@ export default interface IGenerationOptions {
     indexFile: boolean;
     exportType: "named" | "default";
     skipPKcheck: boolean;
+    separateEntityAccordingSchemes: boolean;
 }
 
 export const eolConverter = {
@@ -54,6 +55,7 @@ export function getDefaultGenerationOptions(): IGenerationOptions {
         indexFile: false,
         exportType: "named",
         skipPKcheck: false,
+        separateEntityAccordingSchemes: false,
     };
     return generationOptions;
 }
