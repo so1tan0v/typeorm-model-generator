@@ -94,7 +94,10 @@ function generateModels(
         } else {
             resultFilePath = path.resolve(entitiesPath, `${casedFileName}.ts`);
         }
-        const rendered = entityCompliedTemplate(element);
+        const rendered = entityCompliedTemplate({
+            ...element,
+            withSchema: generationOptions.separateEntityAccordingSchemes,
+        });
         const withImportStatements = removeUnusedImports(
             EOL !== eolConverter[generationOptions.convertEol]
                 ? rendered.replace(
@@ -273,6 +276,10 @@ function createHandlebarsHelpers(generationOptions: IGenerationOptions): void {
         lte: (v1, v2) => v1 <= v2,
         ne: (v1, v2) => v1 !== v2,
         or: (v1, v2) => v1 || v2,
+    });
+
+    Handlebars.registerHelper("ifNotEqual", function (a, b, options) {
+        return a !== b ? options.fn(this) : options.inverse(this);
     });
 }
 

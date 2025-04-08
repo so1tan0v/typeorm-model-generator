@@ -215,6 +215,7 @@ function findFileImports(dbModel: Entity[]) {
                 entity.fileImports.push({
                     entityName: relatedTable.tscName,
                     fileName: relatedTable.fileName,
+                    schema: relatedTable.schema,
                 });
             }
         });

@@ -19,6 +19,7 @@ export type Entity = {
     fileImports: {
         entityName: string;
         fileName: string;
+        schema: string | undefined;
     }[];
     activeRecord?: true;
     generateConstructor?: true;

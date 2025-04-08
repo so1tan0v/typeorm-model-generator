@@ -1,14 +1,20 @@
 {{#*inline "Index"}}
 @Index("{{name}}",[{{#columns}}"{{toPropertyName .}}",{{/columns~}}],{ {{json options}} })
 {{/inline}}
+
 {{#*inline "Import"}}
 import {{localImport (toEntityName entityName)}} from './{{toFileName fileName}}'
 {{/inline}}
+
+{{#*inline "ImportWithSchema"}}
+import {{localImport (toEntityName entityName)}} from '../{{schema}}/{{toFileName fileName}}'
+{{/inline}}
+
 {{#*inline "Column"}}
 {{#generated}}@PrimaryGeneratedColumn({ type:"{{type}}", {{/generated}}{{^generated}}@Column("{{type}}",{ {{#primary}}primary:{{primary}},{{/primary}}{{/generated}}{{json options}}{{#default}},default: {{.}},{{/default}} })
 {{printPropertyVisibility}}{{toPropertyName tscName}}{{strictMode}}:{{tscType}}{{#if options.nullable}} | null{{/if}};
-
 {{/inline}}
+
 {{#*inline "JoinColumnOptions"}}
 { name: "{{name}}", referencedColumnName: "{{toPropertyName referencedColumnName}}" },
 {{/inline}}
@@ -42,6 +48,11 @@ export {{defaultExport}} class {{toEntityName tscName}}{{#activeRecord}} extends
 }
 {{/inline}}
 import {BaseEntity,Column,Entity,Index,JoinColumn,JoinTable,ManyToMany,ManyToOne,OneToMany,OneToOne,PrimaryColumn,PrimaryGeneratedColumn,RelationId} from "typeorm";
+
+{{#if withSchema}}
+{{#fileImports}}{{> ImportWithSchema}}{{/fileImports}}
+{{else}}
 {{#fileImports}}{{> Import}}{{/fileImports}}
+{{/if}}
 
 {{> Entity}}
