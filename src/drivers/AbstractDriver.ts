@@ -244,9 +244,18 @@ export default abstract class AbstractDriver {
                 );
                 return;
             }
-            const referencedEntity = entities.find(
-                (entity) => entity.tscName === relationTmp.relatedTable.tscName
+            let referencedEntity = entities.find(
+                (entity) =>
+                    entity.tscName === relationTmp.relatedTable.tscName &&
+                    entity.schema === relationTmp.ownerTable.schema
             );
+
+            if (!referencedEntity) {
+                referencedEntity = entities.find(
+                    (entity) =>
+                        entity.tscName === relationTmp.relatedTable.tscName
+                );
+            }
             if (!referencedEntity) {
                 TomgUtils.LogError(
                     `Relation between tables ${relationTmp.ownerTable.sqlName} and ${relationTmp.relatedTable.sqlName} didn't found entity model ${relationTmp.relatedTable.sqlName}.`

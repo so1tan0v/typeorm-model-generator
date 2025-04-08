@@ -82,6 +82,7 @@ export default class PostgresDriver extends AbstractDriver {
     ): Promise<Entity[]> {
         const response: {
             /* eslint-disable camelcase */
+            table_schema: string;
             table_name: string;
             column_name: string;
             udt_name: string;
@@ -99,6 +100,7 @@ export default class PostgresDriver extends AbstractDriver {
         }[] = (
             await this.Connection.query(`
                 SELECT 
+                    table_schema,
                     table_name,
                     column_name,
                     udt_name,
@@ -144,7 +146,11 @@ export default class PostgresDriver extends AbstractDriver {
 
         entities.forEach((ent) => {
             response
-                .filter((filterVal) => filterVal.table_name === ent.tscName)
+                .filter(
+                    (filterVal) =>
+                        filterVal.table_name === ent.tscName &&
+                        ent.schema === filterVal.table_schema
+                )
                 .forEach((resp) => {
                     const tscName = resp.column_name;
                     const options: Column["options"] = {
@@ -479,6 +485,7 @@ export default class PostgresDriver extends AbstractDriver {
         schemas: string[]
     ): Promise<Entity[]> {
         const response: {
+            schemaname: string;
             tablename: string;
             indexname: string;
             columnname: string;
@@ -489,6 +496,7 @@ export default class PostgresDriver extends AbstractDriver {
         }[] = (
             await this.Connection.query(`
                 SELECT
+                    n.nspname as schemaname,
                     c.relname AS tablename,
                     i.relname AS indexname,
                     f.attname AS columnname,
@@ -525,9 +533,12 @@ export default class PostgresDriver extends AbstractDriver {
                 ORDER BY c.relname,f.attname;
             `)
         ).rows;
+
         entities.forEach((ent) => {
             const entityIndices = response.filter(
-                (filterVal) => filterVal.tablename === ent.tscName
+                (filterVal) =>
+                    filterVal.tablename === ent.tscName &&
+                    ent.schema === filterVal.schemaname
             );
             const indexNames = new Set(entityIndices.map((v) => v.indexname));
             indexNames.forEach((indexName) => {
@@ -558,6 +569,7 @@ export default class PostgresDriver extends AbstractDriver {
         generationOptions: IGenerationOptions
     ): Promise<Entity[]> {
         const response: {
+            schemaname: string;
             tablewithforeignkey: string;
             // eslint-disable-next-line camelcase
             fk_partno: number;
@@ -572,6 +584,7 @@ export default class PostgresDriver extends AbstractDriver {
         }[] = (
             await this.Connection.query(`
                 SELECT DISTINCT
+                    nspname AS nspname,
                     con.relname AS tablewithforeignkey,
                     att.attnum AS fk_partno,
                     att2.attname AS foreignkeycolumn,
@@ -649,6 +662,7 @@ export default class PostgresDriver extends AbstractDriver {
                 internal.ownerColumns.push(row.foreignkeycolumn);
                 internal.relatedColumns.push(row.foreignkeycolumnreferenced);
             });
+
             relationsTemp.push(internal);
         });
 

@@ -58,6 +58,9 @@ function generateModels(
         noEscape: true,
     });
     databaseModel.forEach((element) => {
+        if (element.sqlName === "file") {
+            debugger;
+        }
         let casedFileName = "";
         const newFileName = element.fileName.replace(
             generationOptions.suffixCaseFile,
